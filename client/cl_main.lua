@@ -3,7 +3,7 @@ if GetResourceState("es_extended") == "started" then ESX = exports['es_extended'
 
 function SendNotification(text, type, time)
     time = time or 2500
-    local C == Config.Framework['Notify']
+    local C = Config.Framework['Notify']
     if C == "qb" then
         QBCore.Functions.Notify(text, type, time)
     elseif C == "esx" then
