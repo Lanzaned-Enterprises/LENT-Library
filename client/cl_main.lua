@@ -55,3 +55,46 @@ end exports("SendPhoneEmail", SendPhoneEmail)
 RegisterNetEvent("LENT-Library:Client:SendPhoneEmail", function(Sender, Subject, Message)
     SendPhoneEmail(Sender, Subject, Message)
 end)
+
+function SendPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
+    local C == Config.Framework['Dispatch']
+    if C == 'ps' then
+        exports["ps-dispatch"]:CustomAlert({
+            coords = vector3(x, y, z),
+            message = message,
+            dispatchCode = code,
+            description = description,
+            radius = 0,
+            sprite = sprite,
+            color = color,
+            scale = scale,
+            length = time,
+            job = jobs
+        })
+    elseif C == 'cd' then
+        local data = exports['cd_dispatch']:GetPlayerInfo()
+        TriggerServerEvent('cd_dispatch:AddNotification', {
+            job_table = jobs,
+            coords = vector3(x, y, z),
+            title = code,
+            message = message,
+            flash = 0,
+            unique_id = data.unique_id,
+            sound = 1,
+            blip = {
+                sprite = sprite,
+                scale = scale,
+                colour = color,
+                flashes = false,
+                text = description,
+                time = time,
+                radius = 0,
+            }
+        })
+    elseif Config.GlobalSettings['Dispatch'] == 'custom' then
+        Config.SendCustomPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
+    end
+end exports("SendPoliceAlert", SendPoliceAlert)
+RegisterNetEvent("LENT-Library:Client:SendPoliceAlert", function(x, y, z, message, code, description, sprite, color, scale, time, jobs)
+    SendPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
+end)
