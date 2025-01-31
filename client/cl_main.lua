@@ -1,9 +1,10 @@
 if GetResourceState("qb-core") == "started" then QBCore = exports['qb-core']:GetCoreObject() end
 if GetResourceState("es_extended") == "started" then ESX = exports['es_extended']:getSharedObject() end
+local F = Config.Framework
 
 function SendNotification(text, type, time)
     time = time or 2500
-    local C = Config.Framework['Notify']
+    local C = F['Notify']
     if C == "qb" then
         QBCore.Functions.Notify(text, type, time)
     elseif C == "esx" then
@@ -14,12 +15,13 @@ function SendNotification(text, type, time)
         Config.SendCustomNotification(text, type, time)
     end
 end exports("SendNotification", SendNotification)
-RegisterNetEvent("LENT-Library:Client:SendNotification", function(text, type time)
+
+RegisterNetEvent("LENT-Library:Client:SendNotification", function(text, type, time)
     SendNotification(text, type, time)
 end)
 
 function SendPhoneEmail(Sender, Subject, Message)
-    local C = Config.Framework['Phone']
+    local C = F['Phone']
     if C == 'qb' then
         TriggerServerEvent('qb-phone:server:sendNewMail', {
             sender = Sender,
@@ -52,12 +54,13 @@ function SendPhoneEmail(Sender, Subject, Message)
         })
     end
 end exports("SendPhoneEmail", SendPhoneEmail)
+
 RegisterNetEvent("LENT-Library:Client:SendPhoneEmail", function(Sender, Subject, Message)
     SendPhoneEmail(Sender, Subject, Message)
 end)
 
 function SendPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
-    local C == Config.Framework['Dispatch']
+    local C = F['Dispatch']
     if C == 'ps' then
         exports["ps-dispatch"]:CustomAlert({
             coords = vector3(x, y, z),
@@ -95,6 +98,7 @@ function SendPoliceAlert(x, y, z, message, code, description, sprite, color, sca
         Config.SendCustomPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
     end
 end exports("SendPoliceAlert", SendPoliceAlert)
+
 RegisterNetEvent("LENT-Library:Client:SendPoliceAlert", function(x, y, z, message, code, description, sprite, color, scale, time, jobs)
     SendPoliceAlert(x, y, z, message, code, description, sprite, color, scale, time, jobs)
 end)
